@@ -226,6 +226,39 @@ public class ClienteControllerTest {
   }
 
   @Test
+  public void update_invalidCpf_invalidEmail_invalidIdade_400() throws Exception {
+
+    ClienteDTO clienteDTO = ClienteDTO
+        .builder()
+        .cod_cliente(BigInteger.valueOf(1))
+        .nome("Cliente Teste")
+        .cpf("00000000000")
+        .idade(-2)
+        .email("email.com")
+        .endereco("Rua brasil, 2021")
+        .cidade("Sao Paulo")
+        .telefone("(19)981234567")
+        .build();
+
+    BigInteger codigo = clienteDTO.getCod_cliente();
+
+    when(clientesRepository.findById(codigo)).thenReturn(Optional.of(clienteDTO));
+    when(clientesRepository.save(any())).thenReturn(clienteDTO);
+
+    mvc.perform(MockMvcRequestBuilders
+        .put("/clientes/"+codigo)
+        .content(toJson(clienteDTO))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.errors[*]").exists())
+        .andExpect(jsonPath("$.errors[*]", hasItem("O cpf e invalido!")))
+        .andExpect(jsonPath("$.errors[*]", hasItem("O email e invalido!")))
+        .andExpect(jsonPath("$.errors[*]", hasItem("A idade e invalida!")));
+  }
+
+  @Test
   public void update_clienteNotFound_404() throws Exception {
 
     ClienteDTO clienteDTO = ClienteDTO
