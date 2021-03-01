@@ -19,28 +19,28 @@ public class Cliente {
 
   private BigInteger codigo;
 
-  @NotEmpty(message = "O campo nome é obrigatorio!")
+  @NotEmpty(message = "O campo nome e obrigatorio!")
   private String nome;
 
-  @NotEmpty(message = "O campo cpf é obrigatorio!")
-  @CPF(message = "O cpf é invalido!")
+  @NotEmpty(message = "O campo cpf e obrigatorio!")
+  @CPF(message = "O cpf e invalido!")
   private String cpf;
 
-  @NotNull(message = "O campo idade é obrigatorio!")
-  @Min(value = 0,message = "A idade é invalida! ")
+  @NotNull(message = "O campo idade e obrigatorio!")
+  @Min(value = 0,message = "A idade e invalida!")
   private Integer idade;
 
-  @NotEmpty(message = "O campo email é obrigatorio!")
-  @Email(message = "O email é invalido")
+  @NotEmpty(message = "O campo email e obrigatorio!")
+  @Email(message = "O email e invalido!")
   private String email;
 
-  @NotEmpty(message = "O campo endereço é obrigatorio!")
+  @NotEmpty(message = "O campo endereco e obrigatorio!")
   private String endereco;
 
-  @NotEmpty(message = "O campo cidade é obrigatorio!")
+  @NotEmpty(message = "O campo cidade e obrigatorio!")
   private String cidade;
 
-  @NotEmpty(message = "O campo telefone é obrigatorio!")
+  @NotEmpty(message = "O campo telefone e obrigatorio!")
   private String telefone;
 
 }

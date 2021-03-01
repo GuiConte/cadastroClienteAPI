@@ -1,6 +1,7 @@
 package com.guiconte.controller;
 
 import com.guiconte.ApiErrors;
+import com.guiconte.exception.ClienteNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
@@ -22,5 +23,11 @@ public class ApplicationControllerAdvice {
                             .collect(Collectors.toList());
 
     return new ApiErrors(errors);
+  }
+
+  @ExceptionHandler(ClienteNotFoundException.class)
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  public ApiErrors handleClienteNotFoundException (ClienteNotFoundException ex){
+    return new ApiErrors(ex.getMessage());
   }
 }
