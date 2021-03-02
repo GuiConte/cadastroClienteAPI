@@ -3,7 +3,8 @@ package com.guiconte.service;
 import com.guiconte.domain.entity.Cliente;
 import com.guiconte.domain.entity.ClienteNullable;
 import java.math.BigInteger;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ClienteService {
 
@@ -15,8 +16,8 @@ public interface ClienteService {
 
   void delete(BigInteger codigo);
 
-  List<Cliente> findAll();
+  Page<Cliente> findAll(Pageable pageable);
 
-  List<Cliente> findWithFilter(Cliente filter);
+  Page<Cliente> findWithFilter(Cliente filter,Pageable pageable);
 
 }

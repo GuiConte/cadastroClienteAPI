@@ -24,6 +24,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -451,21 +453,22 @@ public class ClienteControllerTest {
             .endereco("Rua dois, 2").cidade("Campinas").telefone("(22)98222-2222").build()
     );
 
-    when(clientesRepository.findAll()).thenReturn(clientesDTO);
+    when(clientesRepository.findAll(any(Pageable.class)))
+                      .thenReturn(new PageImpl<ClienteDTO>(clientesDTO));
 
     mvc.perform(MockMvcRequestBuilders
         .get("/clientes/all")
         .accept(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[*].codigo").exists())
-        .andExpect(jsonPath("$[*].nome").exists())
-        .andExpect(jsonPath("$[*].cpf").exists())
-        .andExpect(jsonPath("$[*].data_nascimento").exists())
-        .andExpect(jsonPath("$[*].email").exists())
-        .andExpect(jsonPath("$[*].endereco").exists())
-        .andExpect(jsonPath("$[*].cidade").exists())
-        .andExpect(jsonPath("$[*].telefone").exists());
+        .andExpect(jsonPath("$.content[*].codigo").exists())
+        .andExpect(jsonPath("$.content[*].nome").exists())
+        .andExpect(jsonPath("$.content[*].cpf").exists())
+        .andExpect(jsonPath("$.content[*].data_nascimento").exists())
+        .andExpect(jsonPath("$.content[*].email").exists())
+        .andExpect(jsonPath("$.content[*].endereco").exists())
+        .andExpect(jsonPath("$.content[*].cidade").exists())
+        .andExpect(jsonPath("$.content[*].telefone").exists());
   }
 
   @Test
@@ -482,21 +485,22 @@ public class ClienteControllerTest {
         .telefone("(19)981234567")
         .build();
 
-    when(clientesRepository.findAll(any(Example.class))).thenReturn(Arrays.asList(clienteDTO));
+    when(clientesRepository.findAll(any(Example.class),any(Pageable.class)))
+                .thenReturn(new PageImpl<ClienteDTO>(Arrays.asList(clienteDTO)));
 
     mvc.perform(MockMvcRequestBuilders
         .get("/clientes")
         .accept(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[*].codigo").exists())
-        .andExpect(jsonPath("$[*].nome").exists())
-        .andExpect(jsonPath("$[*].cpf").exists())
-        .andExpect(jsonPath("$[*].data_nascimento").exists())
-        .andExpect(jsonPath("$[*].email").exists())
-        .andExpect(jsonPath("$[*].endereco").exists())
-        .andExpect(jsonPath("$[*].cidade").exists())
-        .andExpect(jsonPath("$[*].telefone").exists());
+        .andExpect(jsonPath("$.content[*].codigo").exists())
+        .andExpect(jsonPath("$.content[*].nome").exists())
+        .andExpect(jsonPath("$.content[*].cpf").exists())
+        .andExpect(jsonPath("$.content[*].data_nascimento").exists())
+        .andExpect(jsonPath("$.content[*].email").exists())
+        .andExpect(jsonPath("$.content[*].endereco").exists())
+        .andExpect(jsonPath("$.content[*].cidade").exists())
+        .andExpect(jsonPath("$.content[*].telefone").exists());
   }
 
   private String toJson(final Object obj) {

@@ -6,6 +6,8 @@ import com.guiconte.dto.ClienteDTO;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 public class ClienteConverter {
 
@@ -38,14 +40,14 @@ public class ClienteConverter {
         .build();
   }
 
-  public static List<Cliente> toBusinessObject(List<ClienteDTO> clientesDTO){
+  public static Page<Cliente> toBusinessObject(Page<ClienteDTO> clientesDTO){
     List<Cliente> clientes = new ArrayList<Cliente>();
     clientesDTO.forEach(
         clienteDTO -> {
           clientes.add(toBusinessObject(clienteDTO));
         }
     );
-    return clientes;
+    return new PageImpl<Cliente>(clientes);
   }
 
   public static ClienteDTO toDTO(ClienteNullable cliente, ClienteDTO clienteDTO){

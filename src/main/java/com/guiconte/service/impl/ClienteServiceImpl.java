@@ -11,11 +11,12 @@ import com.guiconte.exception.ClienteNotFoundException;
 import com.guiconte.repository.ClienteRepository;
 import com.guiconte.service.ClienteService;
 import java.math.BigInteger;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.StringMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -67,19 +68,19 @@ public class ClienteServiceImpl implements ClienteService {
   }
 
   @Override
-  public List<Cliente> findAll() {
-    List<ClienteDTO> clientesDTO = clienteRepository.findAll();
+  public Page<Cliente> findAll(Pageable pageable) {
+    Page<ClienteDTO> clientesDTO = clienteRepository.findAll(pageable);
     return toBusinessObject(clientesDTO);
   }
 
   @Override
-  public List<Cliente> findWithFilter(Cliente filter) {
+  public Page<Cliente> findWithFilter(Cliente filter, Pageable pageable) {
     ExampleMatcher matcher = ExampleMatcher
                             .matching()
                             .withIgnoreCase()
                             .withStringMatcher(StringMatcher.CONTAINING);
     Example example = Example.of(toDTO(filter),matcher);
-    List<ClienteDTO> clientesDTO =  clienteRepository.findAll(example);
+    Page<ClienteDTO> clientesDTO =  clienteRepository.findAll(example,pageable);
     return toBusinessObject(clientesDTO);
   }
 }

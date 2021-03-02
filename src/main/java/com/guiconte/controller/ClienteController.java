@@ -9,9 +9,10 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import java.math.BigInteger;
-import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,7 +66,7 @@ public class ClienteController {
       @ApiResponse(code = 404, message = "Not found error")
   })
   public void patchUpdate(@PathVariable @ApiParam("Cliente code") BigInteger codigo,
-                                @RequestBody @Valid @ApiParam("Entity Cliente") ClienteNullable cliente){
+                @RequestBody @Valid @ApiParam("Entity Cliente") ClienteNullable cliente){
     clienteService.patchUpdate(codigo,cliente);
   }
 
@@ -84,16 +85,17 @@ public class ClienteController {
   @ResponseStatus(HttpStatus.OK)
   @ApiOperation("List all Clientes")
   @ApiResponse(code = 200, message = "Successfully listed")
-  public List<Cliente> findAll(){
-    return clienteService.findAll();
+  public Page<Cliente> findAll(Pageable pageable){
+    return clienteService.findAll(pageable);
   }
 
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
   @ApiOperation("List Clientes with filter")
   @ApiResponse(code = 200, message = "Successfully listed")
-  public List<Cliente> findWithFilter(@ApiParam("Cliente params") Cliente filter){
-    return clienteService.findWithFilter(filter);
+  public Page<Cliente> findWithFilter(@ApiParam("Cliente params") Cliente filter,
+                                      Pageable pageable){
+    return clienteService.findWithFilter(filter,pageable);
   }
 
 }
