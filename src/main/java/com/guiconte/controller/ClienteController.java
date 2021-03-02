@@ -1,6 +1,7 @@
 package com.guiconte.controller;
 
 import com.guiconte.domain.entity.Cliente;
+import com.guiconte.domain.entity.ClienteNullable;
 import com.guiconte.service.ClienteService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,29 +44,29 @@ public class ClienteController {
   }
 
   @PutMapping("/{codigo}")
-  @ResponseStatus(HttpStatus.OK)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   @ApiOperation("Update Cliente")
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Successfully updated"),
       @ApiResponse(code = 400, message = "Validation error"),
       @ApiResponse(code = 404, message = "Not found error")
   })
-  public Cliente update(@PathVariable @ApiParam("Cliente code") BigInteger codigo,
+  public void update(@PathVariable @ApiParam("Cliente code") BigInteger codigo,
                         @RequestBody @Valid @ApiParam("Entity Cliente") Cliente cliente){
-    return clienteService.update(codigo,cliente);
+    clienteService.update(codigo,cliente);
   }
 
   @PatchMapping("/{codigo}")
-  @ResponseStatus(HttpStatus.OK)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   @ApiOperation("Update partialy Cliente")
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Successfully deleted"),
       @ApiResponse(code = 400, message = "Validation error"),
       @ApiResponse(code = 404, message = "Not found error")
   })
-  public Cliente partialyUpdate(@PathVariable @ApiParam("Cliente code") BigInteger codigo,
-                                @RequestBody @Valid @ApiParam("Entity Cliente") Cliente cliente){
-    return clienteService.partialyUpdate(codigo,cliente);
+  public void patchUpdate(@PathVariable @ApiParam("Cliente code") BigInteger codigo,
+                                @RequestBody @Valid @ApiParam("Entity Cliente") ClienteNullable cliente){
+    clienteService.patchUpdate(codigo,cliente);
   }
 
   @DeleteMapping("/{codigo}")

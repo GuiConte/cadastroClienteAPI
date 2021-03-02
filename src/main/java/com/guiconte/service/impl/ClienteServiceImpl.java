@@ -1,17 +1,17 @@
 package com.guiconte.service.impl;
 
-import static com.guiconte.service.converter.ClienteConverter.partialyConvertDTO;
+import static com.guiconte.service.converter.ClienteConverter.dataToIdade;
 import static com.guiconte.service.converter.ClienteConverter.toBusinessObject;
 import static com.guiconte.service.converter.ClienteConverter.toDTO;
 
 import com.guiconte.domain.entity.Cliente;
+import com.guiconte.domain.entity.ClienteNullable;
 import com.guiconte.dto.ClienteDTO;
 import com.guiconte.exception.ClienteNotFoundException;
 import com.guiconte.repository.ClienteRepository;
 import com.guiconte.service.ClienteService;
 import java.math.BigInteger;
 import java.util.List;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -36,6 +36,7 @@ public class ClienteServiceImpl implements ClienteService {
             .findById(codigo)
             .map(clienteExists -> {
               cliente.setCodigo(clienteExists.getCod_cliente());
+              cliente.setIdade(dataToIdade(clienteExists.getData_nascimento()));
               clienteRepository.save(toDTO(cliente));
               return cliente;
             })
@@ -43,11 +44,11 @@ public class ClienteServiceImpl implements ClienteService {
   }
 
   @Override
-  public Cliente partialyUpdate(BigInteger codigo, Cliente cliente) {
+  public Cliente patchUpdate(BigInteger codigo, ClienteNullable cliente) {
     return clienteRepository
         .findById(codigo)
         .map(clienteDTO -> {
-          clienteDTO = partialyConvertDTO(cliente, clienteDTO);
+          clienteDTO = toDTO(cliente, clienteDTO);
           clienteRepository.save(clienteDTO);
           return toBusinessObject(clienteDTO);
         })

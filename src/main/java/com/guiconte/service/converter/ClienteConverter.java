@@ -1,7 +1,9 @@
 package com.guiconte.service.converter;
 
 import com.guiconte.domain.entity.Cliente;
+import com.guiconte.domain.entity.ClienteNullable;
 import com.guiconte.dto.ClienteDTO;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +15,7 @@ public class ClienteConverter {
         .cod_cliente(cliente.getCodigo())
         .nome(cliente.getNome())
         .cpf(cliente.getCpf())
-        .idade(cliente.getIdade())
+        .data_nascimento(cliente.getData_nascimento())
         .email(cliente.getEmail())
         .endereco(cliente.getEndereco())
         .cidade(cliente.getCidade())
@@ -27,7 +29,8 @@ public class ClienteConverter {
         .codigo(clienteDTO.getCod_cliente())
         .nome(clienteDTO.getNome())
         .cpf(clienteDTO.getCpf())
-        .idade(clienteDTO.getIdade())
+        .data_nascimento(clienteDTO.getData_nascimento())
+        .idade(dataToIdade(clienteDTO.getData_nascimento()))
         .email(clienteDTO.getEmail())
         .endereco(clienteDTO.getEndereco())
         .cidade(clienteDTO.getCidade())
@@ -45,7 +48,7 @@ public class ClienteConverter {
     return clientes;
   }
 
-  public static ClienteDTO partialyConvertDTO(Cliente cliente, ClienteDTO clienteDTO){
+  public static ClienteDTO toDTO(ClienteNullable cliente, ClienteDTO clienteDTO){
 
     if(cliente.getNome() != null){
       clienteDTO.setNome(cliente.getNome());
@@ -53,8 +56,8 @@ public class ClienteConverter {
     if(cliente.getCpf() != null){
       clienteDTO.setCpf(cliente.getCpf());
     }
-    if(cliente.getIdade() != null){
-      clienteDTO.setIdade(cliente.getIdade());
+    if(cliente.getData_nascimento() != null){
+      clienteDTO.setData_nascimento(cliente.getData_nascimento());
     }
     if(cliente.getEmail() != null){
       clienteDTO.setEmail(cliente.getEmail());
@@ -70,6 +73,18 @@ public class ClienteConverter {
     }
 
     return clienteDTO;
+  }
+
+  public static Integer dataToIdade(LocalDate data_nascimento){
+    LocalDate now = LocalDate.now();
+    int idade = LocalDate.now().getYear() - data_nascimento.getYear();
+    if(now.getMonthValue() > data_nascimento.getMonthValue())
+      return idade;
+    else if(now.getMonthValue() == data_nascimento.getMonthValue() &&
+        now.getDayOfMonth() >= data_nascimento.getDayOfMonth())
+      return idade;
+    else
+      return idade - 1;
   }
 
 }

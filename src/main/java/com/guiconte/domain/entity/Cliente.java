@@ -1,8 +1,13 @@
 package com.guiconte.domain.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.guiconte.validation.ValidDate;
 import java.math.BigInteger;
+import java.time.LocalDate;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -26,9 +31,13 @@ public class Cliente {
   @CPF(message = "O cpf e invalido!")
   private String cpf;
 
-  @NotNull(message = "O campo idade e obrigatorio!")
-  @Min(value = 0,message = "A idade e invalida!")
   private Integer idade;
+
+  @NotNull(message = "O campo data nascimento e obrigatorio!")
+  @ValidDate
+  @JsonDeserialize(using = LocalDateDeserializer.class)
+  @JsonSerialize(using = LocalDateSerializer.class)
+  private LocalDate data_nascimento;
 
   @NotEmpty(message = "O campo email e obrigatorio!")
   @Email(message = "O email e invalido!")

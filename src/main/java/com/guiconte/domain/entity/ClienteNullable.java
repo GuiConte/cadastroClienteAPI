@@ -1,56 +1,46 @@
-package com.guiconte.dto;
+package com.guiconte.domain.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.guiconte.validation.ValidDate;
 import java.math.BigInteger;
 import java.time.LocalDate;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.hibernate.validator.constraints.br.CPF;
 
-@Builder
-@Getter@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "cliente")
-public class ClienteDTO {
+@Builder
+public class ClienteNullable {
+  private BigInteger codigo;
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private BigInteger cod_cliente;
-
-  @Column(length = 100)
   private String nome;
 
-  @Column(length = 11)
+  @CPF(message = "O cpf e invalido!")
   private String cpf;
 
-  @Column
+  private Integer idade;
+
+  @ValidDate
   @JsonDeserialize(using = LocalDateDeserializer.class)
   @JsonSerialize(using = LocalDateSerializer.class)
   private LocalDate data_nascimento;
 
-  @Column(length = 70)
+  @Email(message = "O email e invalido!")
   private String email;
 
-  @Column(length = 100)
   private String endereco;
 
-  @Column(length = 70)
   private String cidade;
 
-  @Column(length = 30)
   private String telefone;
-
 }
